@@ -26,6 +26,11 @@ public class Bot extends PircBot{
 						this.sendMessage(channel, "Jeb reports that something is wrong and one or more of our servers is down.");
 					}
 		}
+		if (message.equalsIgnoreCase("Bot: Leave")){
+			//this.sendMessage(channel, sender);
+				disconnect();
+				System.exit(1);
+		}
 	}
 	
 	public int getMC(){
