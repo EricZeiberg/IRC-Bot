@@ -36,14 +36,21 @@ public class Bot extends PircBot{
 			String b = a.text();
 			this.sendMessage(channel, b);
 		}
-		if (message.equalsIgnoreCase("Bot: Leave")){
-			//this.sendMessage(channel, sender);
-				disconnect();
-				System.exit(1);
+		if (message.equalsIgnoreCase("Bot: Leave")) {
+			leave(sender, channel);
+			
 		}
+		
 	}
 	
-	
+	public void leave(String sender, String channel){
+		if (!(sender.equalsIgnoreCase("MasterEjay"))){
+			this.sendMessage(channel, "You have no perms!");
+			return;
+		}
+		disconnect();
+		System.exit(1);
+	}
 	
 	
 }
