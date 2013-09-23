@@ -1,3 +1,3 @@
-McStatusBot
+Bot
 ===========
-An IRC bot that gets the status of Mojang servers (Specifically, Minecraft)
+An IRC bot
