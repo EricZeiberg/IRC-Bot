@@ -4,27 +4,37 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.xml.bind.ParseConversionEvent;
+
 import org.jibble.pircbot.PircBot;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class Bot extends PircBot{
 	Document doc = null;
 	public Bot() {
-		this.setName("McStatusBot");
+		this.setName("HAL9000");
 	}
 
 	public void onMessage(String channel, String sender,
 			String login, String hostname, String message) {
-		if (message.equalsIgnoreCase("Bot: Mcstatus")){
-					this.sendMessage(channel, "Poking jeb...");
-					if (getMC() == 7){
-						this.sendMessage(channel, "Jeb reports that all is well and all servers are up!");
-					}
-					else {
-						this.sendMessage(channel, "Jeb reports that something is wrong and one or more of our servers is down.");
-					}
+		if (message.equalsIgnoreCase("Hal: Open the pod bay doors")){
+			this.sendMessage(channel, "Sorry " + sender + ", I'm afraid I can't do that...");
+			this.sendAction(channel, "shuts down...");
+		}
+		
+		if (message.contains("https://github.com/OvercastNetwork/Issues/")){
+			try {
+				Document urlDoc = doc = Jsoup.connect(message).ignoreContentType(true).userAgent("Mozilla").get();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				this.sendMessage(channel, "Something went wrong! Did you type the correct link?");
+			}
+			Elements a = doc.getElementsByClass("discussion-topic-title");
+			String b = a.text();
+			this.sendMessage(channel, b);
 		}
 		if (message.equalsIgnoreCase("Bot: Leave")){
 			//this.sendMessage(channel, sender);
@@ -33,32 +43,7 @@ public class Bot extends PircBot{
 		}
 	}
 	
-	public int getMC(){
-		 try {
-				doc = Jsoup.connect("http://status.mojang.com/check").ignoreContentType(true).userAgent("Mozilla").get();
-			} catch (IOException e) {
-
-				//e.printStackTrace();
-				this.sendMessage("#overcastnetwork", "Seems like something went wrong! :(");
-			}
-		 Element a = doc.body();
-			String as = a.toString();
-			String ab = as.replace("<body>", " ");
-			String ab1 = ab.replace("</body>", " ");
-			int i = getWordCount("green", ab1);
-			return i;
-	}
 	
-	private static int getWordCount(String word,String source){
-        int count = 0;
-        {
-            Pattern p = Pattern.compile(word);
-            Matcher m = p.matcher(source);
-            while(m.find()) count++;
-        }
-        return count;
-    }
-
 	
 	
 }
